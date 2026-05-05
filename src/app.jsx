@@ -1,4 +1,16 @@
-// Root app — state, theme vars, edit mode wiring.
+import { useState, useEffect } from 'react';
+import { ACCENTS } from './copy';
+import Nav from './components/Nav';
+import Hero from './components/Hero';
+import SlabInterview from './components/SlabInterview';
+import SlabSop from './components/SlabSop';
+import { HowItWorks, Features, LogoWall, FAQ, CTA, Footer } from './components/Sections';
+
+const TWEAK_DEFAULTS = {
+  accent: "teal",
+  density: "compact",
+  sections: { interview: true, sop: true, how: true, features: true, logos: true, faq: true, cta: true },
+};
 
 function applyTheme(tweaks) {
   const r = document.documentElement;
@@ -6,18 +18,15 @@ function applyTheme(tweaks) {
   r.style.setProperty("--accent", a.accent);
   r.style.setProperty("--accent-soft", a.accentSoft);
   r.style.setProperty("--accent-ink", a.accentInk);
-
   const padMap = { compact: 0.78, comfortable: 1, spacious: 1.22 };
   r.style.setProperty("--pad", String(padMap[tweaks.density] || 1));
-  document.body.style.setProperty("--section-gap", `${Math.round(96 * (padMap[tweaks.density] || 1))}px`);
 }
 
-function App() {
+export default function App() {
   const [lang, setLang] = useState(() => {
     try { return localStorage.getItem("capture.lang") || "en"; } catch { return "en"; }
   });
-  const [tweaks, setTweaks] = useState(window.TWEAK_DEFAULTS);
-  const [editActive, setEditActive] = useState(false);
+  const [tweaks] = useState(TWEAK_DEFAULTS);
 
   useEffect(() => {
     try { localStorage.setItem("capture.lang", lang); } catch {}
@@ -26,26 +35,9 @@ function App() {
 
   useEffect(() => { applyTheme(tweaks); }, [tweaks]);
 
-  // Edit-mode protocol — register first, announce second.
-  useEffect(() => {
-    const onMsg = (e) => {
-      const d = e.data;
-      if (!d || typeof d !== "object") return;
-      if (d.type === "__activate_edit_mode") setEditActive(true);
-      if (d.type === "__deactivate_edit_mode") setEditActive(false);
-    };
-    window.addEventListener("message", onMsg);
-    window.parent.postMessage({ type: "__edit_mode_available" }, "*");
-    return () => window.removeEventListener("message", onMsg);
-  }, []);
-
   const s = tweaks.sections;
-
-  // Apply a global density scale on top/bottom padding of sections.
-  const mul = { compact: 0.78, comfortable: 1, spacious: 1.22 }[tweaks.density] || 1;
-
   return (
-    <div style={{ ["--mul"]: mul }}>
+    <>
       <Nav lang={lang} setLang={setLang} />
       <Hero lang={lang} />
       {s.interview && <SlabInterview lang={lang} />}
@@ -56,10 +48,6 @@ function App() {
       {s.faq && <FAQ lang={lang} />}
       {s.cta && <CTA lang={lang} />}
       <Footer lang={lang} />
-      <TweaksPanel active={editActive} tweaks={tweaks} setTweaks={setTweaks} />
-    </div>
+    </>
   );
 }
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);

@@ -1,5 +1,4 @@
-// Bilingual copy. CZ is the founder's primary language; EN second.
-const COPY = {
+export const COPY = {
   en: {
     nav: {
       product: "Product",
@@ -95,7 +94,6 @@ const COPY = {
       rights: "© 2026 Capture. All rights reserved.",
     },
   },
-
   cs: {
     nav: {
       product: "Produkt",
@@ -193,14 +191,10 @@ const COPY = {
   },
 };
 
-window.COPY = COPY;
-
-// Accent palettes — kept simple, all share chroma≈0.09 range
-const ACCENTS = {
-  teal:  { accent:"#0F766E", accentSoft:"#D7EBE7", accentInk:"#064E46" },
-  slate: { accent:"#1E293B", accentSoft:"#E2E5EA", accentInk:"#0B121E" },
-  plum:  { accent:"#6D28D9", accentSoft:"#E7DEF6", accentInk:"#3F0F85" },
-  ember: { accent:"#C2410C", accentSoft:"#FBE4D2", accentInk:"#6B240B" },
-  ink:   { accent:"#0F1412", accentSoft:"#E6E4DD", accentInk:"#000000" },
+export const ACCENTS = {
+  teal:  { accent: "#0F766E", accentSoft: "#D7EBE7", accentInk: "#064E46" },
+  slate: { accent: "#1E293B", accentSoft: "#E2E5EA", accentInk: "#0B121E" },
+  plum:  { accent: "#6D28D9", accentSoft: "#E7DEF6", accentInk: "#3F0F85" },
+  ember: { accent: "#C2410C", accentSoft: "#FBE4D2", accentInk: "#6B240B" },
+  ink:   { accent: "#0F1412", accentSoft: "#E6E4DD", accentInk: "#000000" },
 };
-window.ACCENTS = ACCENTS;
